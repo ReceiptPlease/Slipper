@@ -1,0 +1,13 @@
+{
+    "imports" : {
+
+        "Liquid" : "npm:liquidjs@10.4.0" ,
+        "Zod" : "https://deno.land/x/zod@v3.16.1/mod.ts" ,
+
+        "FileSystem" : "https://deno.land/std@0.177.0/fs/mod.ts" ,
+        "Colors" : "https://deno.land/std@0.177.0/fmt/colors.ts" ,
+        "Flags" : "https://deno.land/std@0.177.0/flags/mod.ts" ,
+        "Toml" : "https://deno.land/std@0.177.0/encoding/toml.ts" ,
+        "Path" : "https://deno.land/std@0.177.0/path/mod.ts"
+    }
+}
