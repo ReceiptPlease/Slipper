@@ -3,6 +3,7 @@
 
     "tasks" : {
         "preview" : "file_server Test/Build/" ,
-        "test" : "bash .config/Scripts/Test.sh"
+        "test" : "bash .config/Scripts/Test.sh" ,
+        "install" : "bash .config/Scripts/Install.sh"
     }
 }

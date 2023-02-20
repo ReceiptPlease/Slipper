@@ -136,10 +136,8 @@ const template_output =
 const template = await Deno
     .readTextFile(template_input);
 
-let html = await engine
-    .parseAndRender(template,undefined,{
-        globals : context
-    });
+let liquid = template;
+
 
 
 const snippets = new Map<string,string>;
@@ -166,12 +164,12 @@ if( Config.Input.Snippets ){
 console.log('Snippets',snippets);
 
 
-html = html.replaceAll(/<!-- *Insert *(.+?) *-->/g,( _ : any , path : string ) => {
+liquid = liquid.replaceAll(/<!-- *Insert *(.+?) *-->/g,( _ : any , path : string ) => {
 
     const file = `${ path }.liquid`;
 
     if( snippets.has(file) )
-        return snippets.get(file)
+        return snippets.get(file) ?? ''
 
     console.warn(`Couldn't find snippet '${ path }'`);
 
@@ -192,13 +190,18 @@ if( Config.Input.Styles ){
     const entries = walk(path_styles,options);
 
     for await ( const entry of entries )
-        html += await Deno.readTextFile(entry.path);
+        liquid += await Deno.readTextFile(entry.path);
 
 }
 
 
-await Deno.writeTextFile(template_output,html);
+await Deno.writeTextFile(template_output,liquid);
 
+
+let html = await engine
+    .parseAndRender(template,undefined,{
+        globals : context
+    });
 
 html += `
 
