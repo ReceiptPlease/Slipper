@@ -9,7 +9,7 @@ log(`Starting Slipper`);
 import Arguments from './Arguments/mod.ts'
 import Config from './Config/mod.ts'
 
-import { dirname , join } from 'Path'
+import { basename , dirname , join } from 'Path'
 import { Liquid } from 'Liquid'
 import { walk } from 'FileSystem'
 
@@ -34,6 +34,7 @@ function image_url ( url : string, ... args : any [] ){
 function image_tag ( url : string ){
     return `<img src="${ url }" alt="Health potion">`
 }
+
 
 const context = {
 
@@ -141,6 +142,41 @@ let html = await engine
     });
 
 
+const snippets = new Map<string,string>;
+
+if( Config.Input.Snippets ){
+
+    const options = {
+        includeFiles : true ,
+        includeDirs : false ,
+        exts : [ 'liquid' ]
+    }
+
+    const folder = join(dirname(Arguments.config),Config.Input.Snippets);
+
+    const entries = walk(folder,options);
+
+    for await ( const entry of entries )
+        snippets.set(basename(entry.path),await Deno.readTextFile(entry.path));
+
+}
+
+
+
+console.log('Snippets',snippets);
+
+
+html = html.replaceAll(/<!-- *Insert *(.+?) *-->/g,( _ : any , path : string ) => {
+
+    const file = `${ path }.liquid`;
+
+    if( snippets.has(file) )
+        return snippets.get(file)
+
+    console.warn(`Couldn't find snippet '${ path }'`);
+
+    return ''
+})
 
 
 if( Config.Input.Styles ){

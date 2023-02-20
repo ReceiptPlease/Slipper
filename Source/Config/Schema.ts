@@ -6,6 +6,9 @@ export const Schema = z.object({
 
     Input : z.object({
         Template : z.string() ,
+        Snippets : z
+            .string()
+            .optional(),
         Styles : z
             .string()
             .optional()
