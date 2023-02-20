@@ -199,7 +199,7 @@ await Deno.writeTextFile(template_output,liquid);
 
 
 let html = await engine
-    .parseAndRender(template,undefined,{
+    .parseAndRender(liquid,undefined,{
         globals : context
     });
 
@@ -223,6 +223,7 @@ html += `
 
         .wrapper {
             font-size : 15px ;
+            max-width : 100% ;
         }
 
         .wrapper > * {
